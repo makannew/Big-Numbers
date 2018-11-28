@@ -1,6 +1,7 @@
 //Function definitions
 #include "stdafx.h"
 #include "BigNumber.h"
+#include <type_traits>
 
 
 string BigNumber::same_pos_digits(BigNumber &b, string::size_type pos) const	{
@@ -167,31 +168,71 @@ void BigNumber::read_string() {
 	}
 
 BigNumber::BigNumber() {
-		BigNumber::set_to_zero();
 	}
 
-BigNumber::BigNumber(string s)	{
-		BigNumber::set(s);
-	}
+BigNumber::BigNumber(string s) {
+	BigNumber::set(s);
+}
+
+BigNumber::BigNumber(char * s) {
+	BigNumber::set(s);
+}
+
+BigNumber::BigNumber(int n) {
+	BigNumber::set(n);
+}
+
+BigNumber::BigNumber(long int n) {
+	BigNumber::set(n);
+}
+
+BigNumber::BigNumber(long long int n) {
+	BigNumber::set(n);
+}
+
+BigNumber::BigNumber(double n) {
+	BigNumber::set(n);
+}
 
 BigNumber::BigNumber(long double n) {
-		BigNumber::set(n);
-	}
+	BigNumber::set(n);
+}
 
-void BigNumber::set(string &s)	{
-		digits_string.assign(s); //copy s content into digits_string for further processing
-		BigNumber::read_string();
-	}
-void BigNumber::set(long double n) {
-		digits_string.assign(to_string(n));
-		BigNumber::read_string();
-	}
+
+void BigNumber::set(string &s) {
+	digits_string.assign(s); //copy s content into digits_string for further processing
+	BigNumber::read_string();
+}
 
 void BigNumber::set(char *s) {
-		digits_string.assign(s);
-		BigNumber::read_string();
+	digits_string.assign(s);
+	BigNumber::read_string();
+}
+
+void BigNumber::set(int n) {
+	BigNumber::set(to_string(n));
+}
+
+void BigNumber::set(long int n) {
+	BigNumber::set(to_string(n));
+}
+
+void BigNumber::set(long long int n) {
+	BigNumber::set(to_string(n));
+}
+
+void BigNumber::set(double n) {
+	BigNumber::set(to_string(n));
+}
+
+
+void BigNumber::set(long double n) {
+		BigNumber::set(to_string(n));
 	}
 
+
+
+	
 void BigNumber::set_to_zero() {
 		dotplace = 0;
 		integer_lenght = 1;
@@ -307,3 +348,95 @@ BigNumber BigNumber::add(BigNumber &b) {
 		result.integer_lenght = result.digits_string.length() - result.dotplace;
 		return result;
 	}
+BigNumber BigNumber::mul(BigNumber &b) {
+	// first detect rouphly bigger and smaller number to always mul smaller one to bigger one
+	// to cause less addition which it is more expensive
+	BigNumber * bigger_number;
+	BigNumber * smaller_number;
+	if ((BigNumber::integer_lenght + BigNumber::dotplace) < (b.integer_lenght + b.dotplace))
+	{
+		smaller_number = this;
+		bigger_number = &b;
+	}
+	else
+	{
+		smaller_number = &b;
+		bigger_number = this;
+	}
+	// unsigned long int can safely add two numbers, each one up to 8 decimal digits
+	// so each time we multiply two numbers with 4 digits to make sure the results are within the limits
+	// it can shows 0 to 4,294,967,295. In this way we can bnefit from 32bit ALU hardware mutiplication
+	unsigned long int x(0);
+	unsigned long int y(0);
+	unsigned long int carrier(0);
+	std::string temp_string;
+	std::string each_product;
+	std::string::size_type mul_digits_step (4);// multiply 4 digits each time
+	std::string digits_step_zeros = "0000";
+	std::string shift_zeros = "";
+	std::string::size_type smaller_number_iterator = smaller_number->integer_lenght + smaller_number->dotplace ;
+	std::string::size_type bigger_number_iterator = bigger_number->integer_lenght + bigger_number->dotplace ;
+	BigNumber result = zero_character;
+	BigNumber temp_result = zero_character;
+	//
+	while (smaller_number_iterator > 0)
+	{
+		if (smaller_number_iterator <= mul_digits_step)
+		{
+			x = std::stoul(smaller_number->digits_string.substr(0,smaller_number_iterator), nullptr, base_radix);
+			smaller_number_iterator = 0;
+		}
+		else
+		{
+			smaller_number_iterator -= mul_digits_step;
+			x = std::stoul(smaller_number->digits_string.substr(smaller_number_iterator  , mul_digits_step), nullptr, base_radix);
+		}
+		each_product = shift_zeros;
+		shift_zeros += digits_step_zeros;
+		bigger_number_iterator = bigger_number->integer_lenght + bigger_number->dotplace;
+		carrier = 0;
+		while (bigger_number_iterator > 0)
+		{
+			if (bigger_number_iterator <= mul_digits_step)
+			{
+				y = std::stoul(bigger_number->digits_string.substr(0, bigger_number_iterator), nullptr, base_radix);
+				bigger_number_iterator = 0;
+			}
+			else
+			{
+				bigger_number_iterator -= mul_digits_step;
+				y = std::stoul(bigger_number->digits_string.substr(bigger_number_iterator, mul_digits_step), nullptr, base_radix);
+			}
+			y = (x * y) + carrier;
+			temp_string = std::to_string(y);
+			if (temp_string.length() > mul_digits_step)
+			{
+				carrier = std::stoul(temp_string.substr(0,temp_string.length () - mul_digits_step), nullptr, base_radix);
+				temp_string.erase(0 , temp_string.length() - mul_digits_step);
+			}
+			else
+			{
+				carrier = 0;
+			}
+			while (temp_string.length() < mul_digits_step)
+			{
+				temp_string.insert(0, zero_character);
+			}
+			each_product.insert(0, temp_string);
+
+		}
+		if (carrier != 0)
+		{
+			each_product.insert(0, std::to_string(carrier));
+		}
+		temp_result.set(each_product);
+		
+		result = result.add(temp_result);
+
+
+	}
+	
+	
+	return result;
+
+}

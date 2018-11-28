@@ -42,8 +42,25 @@ public:
 	/// Overload contructor for string input.
 	BigNumber(string s);
 
-	/// Overload constructor for long double input.
+	///constructor char type
+	BigNumber(char * s);
+
+	///constructor int type
+	BigNumber(int n);
+
+	///constructor  long int type
+	BigNumber(long int n);
+
+	///constructor long long int type
+	BigNumber(long long int n);
+
+	///constructor double type
+	BigNumber(double n);
+
+	///constructor long double type
 	BigNumber(long double n);
+
+
 
 	/** @brief set BigNumber correspondent to input string
 	*
@@ -61,7 +78,6 @@ public:
 	* @see set(char *s)
 	*/
 	void set(string &s);
-	
 
 	/** @brief set BigNumber correspondent to input double or integer type
 	*
@@ -72,7 +88,21 @@ public:
 	* @param n the input number with double or integer type
 	* @return void
 	*/
+	void set(int n);
+
+	///@see set(int n)
+	void set(long int n);
+	///@see set(int n)
+	void set(long long int n);
+	///@see set(int n)
+	void set(double n);
+	///@see set(int n)
 	void set(long double n);
+	
+
+
+	
+	
 
 
 	/** @brief set BigNumber correspondent to input characters
@@ -91,6 +121,7 @@ public:
 	* @see set()
 	*/
 	void set(char *s);
+	
 
 
 	void set_to_zero();
@@ -102,20 +133,13 @@ public:
 
 	BigNumber add(BigNumber &b);
 
+	BigNumber mul(BigNumber &b);
+
 private:
 	//Member Variables
 
 	//for comparing two numbers
 	enum comp { equal, bigger, smaller };
-
-	//store big number as string of digits
-	string digits_string;
-
-	//fraction part of the number will define by dotplace
-	string::size_type dotplace;
-
-	//integer part of the number will define by integer_lenght
-	string::size_type integer_lenght;
 
 	string period = ".";
 
@@ -127,11 +151,25 @@ private:
 
 	string valid_digits = "0123456789";
 
+	//store big number as string of digits
+	string digits_string="0";
+
+	//fraction part of the number will define by dotplace
+	string::size_type dotplace=0;
+
+	//integer part of the number will define by integer_lenght
+	string::size_type integer_lenght=1;
+
+	//radix or base for number interpretation
+	int base_radix = 10;
+
+
+
 	//positive=true means number's sign is positive and if it is false means sign is negative
-	bool positive;
+	bool positive=true;
 
 	//if invalid string of data feed to make a big number is_valid will be false
-	bool is_valid;
+	bool is_valid=true;
 
 	//Member private functions
 	string same_pos_digits(BigNumber &b, string::size_type pos) const;
