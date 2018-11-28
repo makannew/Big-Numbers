@@ -443,3 +443,11 @@ BigNumber BigNumber::mul(BigNumber &b) {
 	return result;
 
 }
+BigNumber BigNumber::sub(BigNumber &b)
+{
+	BigNumber result;
+	b.positive = !b.positive;
+	result = add(b);
+	b.positive = !b.positive;
+	return result;
+}

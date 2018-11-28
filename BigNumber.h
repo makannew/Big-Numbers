@@ -135,6 +135,8 @@ public:
 
 	BigNumber mul(BigNumber &b);
 
+	BigNumber sub(BigNumber &b);
+
 private:
 	//Member Variables
 
