@@ -429,12 +429,15 @@ BigNumber BigNumber::mul(BigNumber &b) {
 		{
 			each_product.insert(0, std::to_string(carrier));
 		}
+		each_product.insert(each_product.length()-(smaller_number->dotplace + bigger_number->dotplace), period);
 		temp_result.set(each_product);
+
 		
 		result = result.add(temp_result);
 
 
 	}
+	if (bigger_number->positive != smaller_number->positive) result.positive = false;
 	
 	
 	return result;
