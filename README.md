@@ -1,4 +1,4 @@
-BigNumbers
+BigNumber
 ===========
 It is a class that is useful for dealing with realy big numbers. We can define numbers as integer or fractional with thausands of digits and do math operations same as basic variables.
 
