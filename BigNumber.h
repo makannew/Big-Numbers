@@ -252,7 +252,8 @@ public:
 * @see mul_10()
 */
 	BigNumber sub(BigNumber &b);
-/** @brief multiply a BigNumber to this BigNumber
+
+/** @brief divide a BigNumber to this BigNumber
 *
 *	overloaded operator / also can be used
 *
@@ -370,7 +371,7 @@ public:
 */
 	void inc();
 
-/** @brief return absolute value of this BigNumber
+/** @brief convert this BigNumber to absolute value
 *
 *	Disregard to the sign of the BigNumber it will always set to positive sign
 *
@@ -418,15 +419,19 @@ private:
 
 	///for comparing two numbers
 	enum comp { equal, bigger, smaller };
-
+	///Default character for separating integer part from fractional part
 	string period = ".";
 
+	///Default negative sign charachter
 	string negative_sign = "-";
 
+	///Default positive sign chaacter
 	string positive_sign = "+";
 
+	///Default zero character
 	string zero_character = "0";
 
+	///Valid characters to represent decimal digits
 	string valid_digits = "0123456789";
 
 
@@ -440,7 +445,7 @@ private:
 	///integer part of the number will define by integer_lenght
 	string::size_type integer_lenght=1;
 
-	///radix or base for number interpretation
+	///radix or base for numbers value interpretation
 	int base_radix = 10;
 
 
@@ -451,7 +456,7 @@ private:
 	//if invalid string of data feed to make a big number is_valid will be false
 	bool is_valid=true;
 
-	//Member private functions
+	//Private functions
 	string same_pos_digits(BigNumber &b, string::size_type pos) const;
 
 	comp absolute_compare(BigNumber &b) const;
@@ -462,6 +467,7 @@ private:
 
 	string::size_type max_integer(BigNumber &b) const;
 
+	///Convert string to BigNumber
 	void read_string();
 	
 };
