@@ -12,11 +12,18 @@ This repo is compiled by [Makan Edrisi](https://github.com/makannew)
 - [How to use with example](https://github.com/makannew/Big-Numbers/blob/master/README.md#how-to-use)
 
 ## Class Members
-- add(BigNumber b)
-- sub(BigNumber b)
-- mul(BigNumber b)
-- mul_10(size_t n)
-- div(BigNumber b)
+- add(BigNumber b) or operator +
+- sub(BigNumber b) or operator -
+- mul(BigNumber b) or operator *
+- mul_10(size_type n)
+- div(BigNumber b) or operator /
+- get_string()
+- get_sign()
+- inc() or operator ++
+- dec() or operator --
+- max_div_digits
+- set () or operator =
+- set_to_zero()
 
 ## Documentation
 Class members implementation documented by Doxygen. It is available [here](https://makannew.github.io/Big-Numbers/)
