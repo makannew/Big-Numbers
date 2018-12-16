@@ -29,7 +29,7 @@ This repo is compiled by [Makan Edrisi](https://github.com/makannew)
 Class members implementation documented by Doxygen. It is available [here](https://makannew.github.io/Big-Numbers/)
 
 ## How to use
-By adding "BigNumber.h" and "BigNumber.cpp" to a project we can define BigNumber variables like regular int or double variables.
+By adding ["BigNumber.h"](BigNumber.h) and ["BigNumber.cpp"](BigNumber.cpp) to a project we can define BigNumber variables like regular int or double variables.
 The example below shows how it works:
 ```
 #include "stdafx.h"
