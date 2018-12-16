@@ -35,4 +35,4 @@ int main()
     return 0;
 }
 ```
-![result:](Big-Numbers/screenshot.jpg)
+![result](/Big-Numbers/screenshot.jpg)
