@@ -35,6 +35,8 @@
  * @author Makan Edrisi
  * @version 1.1
  * @date Dec 2018
+ *
+ * Souce code can be found at <https://github.com/makannew/Big-Numbers>
 */
 
 #include<iostream>
@@ -298,7 +300,7 @@ public:
 	* {
 	* @endcode
 	*
-	* @param b is the number of 10 that multiply to this BigNumber
+	* @param unsigned size_type is the number of 10 that multiply to this BigNumber (Default = 1)
 	* @return BigNumber
 	*
 	* @see add()
