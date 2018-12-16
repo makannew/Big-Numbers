@@ -15,11 +15,17 @@
  * #include <string>
  *
  * int main() {
- * BigNumber A,B,C;
- * A = "0.0000000000000000000000000000000000000000000000000000000001"
- * B = "100000000000000000000000000000000000000000000000000000000000"
- * C = A.add(B);
- * std::cout << C.get_string() << endl;
+ * BigNumber i,j,k;
+ * i = "0.0000000000000000000000000000000000000000000000000000000001"
+ * j = "-100000000000000000000000000000000000000000000000000000000000"
+ * 
+ * std::cout << i + j << std::endl;
+ * std::cout << i - j << std::endl;
+ * std::cout << i * j << std::endl;
+ * std::cout << i / j << std::endl;
+ * if (i == j) std::cout << "i = j";
+ * if (i > j) std::cout << "i > j"; 
+ * if (i < j) std::cout << "i = j";
  * {
  * @endcode
  *    
@@ -70,7 +76,7 @@ public:
 	*
 	*     - Integer part can separated with "." from fractional part.
 	*
-	*     * Zeros befor number will be ignored.
+	*     - Zeros befor number will be ignored.
 	* 
 	* @param s the string of valid digits
 	* @return void
@@ -79,14 +85,16 @@ public:
 	*/
 	void set(string &s);
 
-	/** @brief set BigNumber correspondent to input double or integer type
+	/** @brief set BigNumber correspondent to input integer type
 	*
-	*     a member function initialize BigNumber from input double or integer
+	*     a member function initialize BigNumber from input an integer
 	*
-	*     the number limit is limit of double of integer type
+	*     the number limit is limit of integer type
 	*
 	* @param n the input number with double or integer type
 	* @return void
+	*
+	* @see set(char *s) 
 	*/
 	void set(int n);
 
@@ -98,6 +106,8 @@ public:
 	void set(double n);
 	///@see set(int n)
 	void set(long double n);
+	///@see set(int n)
+	void set(unsigned long int n);
 	
 
 
@@ -113,7 +123,7 @@ public:
 	*
 	*     - Integer part can separated with "." from fractional part.
 	*
-	*     * Zeros befor number will be ignored.
+	*     - Zeros befor number will be ignored.
 	*
 	* @param s as char type point to valid digits
 	* @return void
@@ -123,19 +133,86 @@ public:
 	void set(char *s);
 	
 
-
+	/** @brief set BigNumber equal to zero
+	*
+	* @param no need
+	* @return void
+	*
+	* @see set()
+	*/
 	void set_to_zero();
 
+	/** @brief get BigNumber as a string
+	*
+	*	it will generate a string to show a BigNumber value
+	*
+	* @param no need
+	* @return void
+	*
+	*/
 	string get_string();
 
 	///get sign of the number True= positive, false= negative
 	bool get_sign() const;
 
+
+	/** @brief add a BigNumber to this BigNumber
+	*
+	*	overloaded operator + also can be used 
+	*
+	*@code
+	* #include "BigNumber.h"
+	* #include <iostream>
+	* #include <string>
+	*
+	* int main() {
+	* BigNumber i = "517625387123871628"
+	* BigNumber j = "0.00982398"
+	* BigNumber k;
+	* k = i + j; 
+	* std::cout << i + j << std::endl;
+	 * std::cout << k << std::endl;
+	* {
+	* @endcode
+	*
+	* @param b is a BigNumber that would be add
+	* @return void
+	*
+	* @see sub()
+	* @see mul()
+	* @see div()
+	* @see mul_10()
+	*/
 	BigNumber add(BigNumber &b);
 
 	BigNumber mul(BigNumber &b);
 
 	BigNumber sub(BigNumber &b);
+
+	BigNumber div(BigNumber &b);
+
+	void mul_10(std::string::size_type = 1); // default mul by 10
+
+	void dec();
+
+	void inc();
+
+	void abs();
+
+	bool operator != (BigNumber &b);
+	bool operator == (BigNumber &b);
+	bool operator > (BigNumber &b);
+	bool operator < (BigNumber &b);
+	bool operator >= (BigNumber &b);
+	bool operator <= (BigNumber &b);
+	BigNumber operator + (BigNumber &b);
+	BigNumber operator - (BigNumber &b);
+	BigNumber operator / (BigNumber &b);
+	BigNumber operator * (BigNumber &b);
+	void operator -- ();
+	void operator ++ ();
+	
+	friend ostream & operator << (ostream & os, BigNumber &b);
 
 private:
 	//Member Variables
@@ -152,6 +229,9 @@ private:
 	string zero_character = "0";
 
 	string valid_digits = "0123456789";
+
+	//maximum digits of fraction part during dividing
+	string::size_type max_div_digits = 100;
 
 	//store big number as string of digits
 	string digits_string="0";
@@ -185,6 +265,7 @@ private:
 	string::size_type max_integer(BigNumber &b) const;
 
 	void read_string();
+	
 };
 
 #endif 

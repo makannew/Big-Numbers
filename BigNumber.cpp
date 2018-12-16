@@ -1,7 +1,10 @@
 //Function definitions
 #include "stdafx.h"
 #include "BigNumber.h"
-#include <type_traits>
+//#include <type_traits>
+#include <assert.h>
+//
+//#include <iomanip>
 
 
 string BigNumber::same_pos_digits(BigNumber &b, string::size_type pos) const	{
@@ -130,8 +133,6 @@ string::size_type BigNumber::max_integer(BigNumber &b) const	{
 			return b.integer_lenght;
 	}
 void BigNumber::read_string() {
-		//int sub_end;
-		//int sub_lenght;
 		//find out the sign of the number
 		if (digits_string[0] == positive_sign[0])
 			digits_string.erase(0, 1); // erase "+" sign 
@@ -141,18 +142,50 @@ void BigNumber::read_string() {
 			positive = false;
 		}
 		else
+		{
 			positive = true;
+		}
+		//remove zere from left
+		if (digits_string.find_first_not_of(zero_character[0]) != std::string::npos)
+		{
+			digits_string.erase(0, digits_string.find_first_not_of(zero_character[0]));
+		}
+		else
+		{
+			BigNumber::set_to_zero();
+			BigNumber::is_valid = false;
+			return;
+		}
+
+
 		//find out the period place
-		string::size_type p = digits_string.find(period);// using index-based iterator for practice
+		string::size_type p = digits_string.find(period);
 		if (p != string::npos)
 		{
-			dotplace = digits_string.length() - p - 1;
 			digits_string.erase(p, 1);
+			if (digits_string.find_first_not_of(zero_character) != std::string::npos)
+			{
+				dotplace = digits_string.length() - p ;
+			}
+			else
+			{
+				BigNumber::set_to_zero();
+				return;
+			}
 		}
-		else dotplace = 0;
+		else
+		{
+			dotplace = 0;
+		}
+		if (digits_string == "") 
+		{ 
+			BigNumber::set_to_zero();
+			BigNumber::is_valid = false;
+			return;
+		}
 		//find out if it is a valid number or not
 		is_valid = true; //initially assume it is a valid number
-		string::iterator i;//accessing elements using iterator-based iterator for practice
+		string::iterator i;//accessing elements using iterator-based iterator
 		for (i = digits_string.begin(); i != digits_string.end(); ++i)
 		{
 			if (valid_digits.find(*i) == string::npos)
@@ -162,10 +195,16 @@ void BigNumber::read_string() {
 			}
 		}
 		if (is_valid)
+		{
 			integer_lenght = BigNumber::digits_string.length() - BigNumber::dotplace;
+		}
 		else
+		{
 			BigNumber::set_to_zero();// if input string is not a valid number load it with zero
+			BigNumber::is_valid = false;
+		}
 	}
+
 
 BigNumber::BigNumber() {
 	}
@@ -229,7 +268,9 @@ void BigNumber::set(double n) {
 void BigNumber::set(long double n) {
 		BigNumber::set(to_string(n));
 	}
-
+void BigNumber::set(unsigned long int n) {
+	BigNumber::set(to_string(n));
+}
 
 
 	
@@ -242,13 +283,10 @@ void BigNumber::set_to_zero() {
 	}
 string BigNumber::get_string()	{
 		string result;
-		if (!BigNumber::positive) result = negative_sign;
-		result.append(BigNumber::digits_string, 0, BigNumber::integer_lenght);
-		if (BigNumber::dotplace > 0)
-		{
-			result.push_back(BigNumber::period[0]);
-			result.append(BigNumber::digits_string, BigNumber::integer_lenght);
-		}
+		result = BigNumber::digits_string;
+		if (BigNumber::dotplace != 0) result.insert(result.length() - BigNumber::dotplace, BigNumber::period);
+		if (result[0] == period[0]) result.insert(0, zero_character);
+		if (!BigNumber::positive) result = negative_sign + result;
 		return result;
 	}
 bool BigNumber::get_sign() const {
@@ -339,12 +377,17 @@ BigNumber BigNumber::add(BigNumber &b) {
 			--result_lenght;
 			result.digits_string[result_lenght] = valid_digits[sum_flag];
 		}
+
+		result_lenght = 0;
 		//remove zero from left
-		while (result.digits_string[result_lenght] == zero_character[0] && result_lenght < result.digits_string.length())
+		
+		while (result.digits_string[result_lenght] == zero_character[0] && (result_lenght + result.dotplace ) < result.digits_string.length())
 		{
 			++result_lenght;
 		}
 		if (result_lenght > 0) result.digits_string.erase(0, result_lenght);
+
+		
 		result.integer_lenght = result.digits_string.length() - result.dotplace;
 		return result;
 	}
@@ -363,6 +406,7 @@ BigNumber BigNumber::mul(BigNumber &b) {
 		smaller_number = &b;
 		bigger_number = this;
 	}
+
 	// unsigned long int can safely add two numbers, each one up to 8 decimal digits
 	// so each time we multiply two numbers with 4 digits to make sure the results are within the limits
 	// it can shows 0 to 4,294,967,295. In this way we can bnefit from 32bit ALU hardware mutiplication
@@ -376,8 +420,11 @@ BigNumber BigNumber::mul(BigNumber &b) {
 	std::string shift_zeros = "";
 	std::string::size_type smaller_number_iterator = smaller_number->integer_lenght + smaller_number->dotplace ;
 	std::string::size_type bigger_number_iterator = bigger_number->integer_lenght + bigger_number->dotplace ;
+	std::string::size_type final_dotplace;
 	BigNumber result = zero_character;
 	BigNumber temp_result = zero_character;
+	//check if one of them is zero
+	if (smaller_number->digits_string == zero_character || bigger_number->digits_string == zero_character) return result;
 	//
 	while (smaller_number_iterator > 0)
 	{
@@ -429,7 +476,14 @@ BigNumber BigNumber::mul(BigNumber &b) {
 		{
 			each_product.insert(0, std::to_string(carrier));
 		}
-		each_product.insert(each_product.length()-(smaller_number->dotplace + bigger_number->dotplace), period);
+		//
+		final_dotplace = smaller_number->dotplace + bigger_number->dotplace;
+		while (each_product.length() < final_dotplace)
+		{
+			each_product.insert(0, zero_character);
+		}
+		each_product.insert(each_product.length() - final_dotplace, period);
+
 		temp_result.set(each_product);
 
 		
@@ -450,4 +504,253 @@ BigNumber BigNumber::sub(BigNumber &b)
 	result = add(b);
 	b.positive = !b.positive;
 	return result;
+}
+BigNumber BigNumber::div(BigNumber &b)
+{
+	// unsigned long int can safely use for dividing two numbers, each one up to 9 decimal digits
+	// it can shows 0 to 4,294,967,295. In this way we can bnefit from 32bit ALU hardware division
+	unsigned long int q,n,d;
+	BigNumber result, n_temp, d_temp, q_temp, temp;
+	std::string::size_type d_extra_digits, n_extra_digits, largest_dotplace, d_max_digits, n_max_digits, final_dotplace;
+	//initial values
+	d_max_digits = 8;
+	d_temp = b;
+	temp = 0;
+	result = 0;
+	final_dotplace = 0;
+		
+	// check divide by zero
+	assert(b != temp && "cannot divide by zero");
+	// check if numerator is zero
+	if (BigNumber::compare(temp) == equal)
+	{
+		return temp;
+	}
+	//convert nominator and divisor to integers
+	if (BigNumber::dotplace > d_temp.dotplace)
+	{
+		largest_dotplace = BigNumber::dotplace;
+	}
+	else
+	{
+		largest_dotplace = d_temp.dotplace;
+
+	}
+	n_temp.set(BigNumber::get_string());
+	n_temp.mul_10(largest_dotplace);
+	d_temp.mul_10(largest_dotplace);
+	//make them positive numbers
+	n_temp.abs();
+	d_temp.abs();
+
+	d = std::stoul(d_temp.digits_string.substr(0,d_max_digits), nullptr, base_radix);
+	if (d_temp.digits_string.length() > d_max_digits)
+	{
+		d_extra_digits = d_temp.digits_string.length() - d_max_digits;
+	}
+	else
+	{
+		d_extra_digits = 0;
+	}
+
+
+	while (final_dotplace <= max_div_digits && n_temp.digits_string != zero_character)
+	{
+		//make nominator bigger than divisor 
+		while (n_temp < d_temp)
+		{
+			++final_dotplace;
+			n_temp.mul_10();
+			result.mul_10();
+		}
+		// assign n as enough digits from left of nominator to make sure it is bigger than d
+		n_max_digits = d_max_digits;
+		n = std::stoul(n_temp.digits_string.substr(0, n_max_digits), nullptr, base_radix);
+		if (n < d)
+		{
+			++n_max_digits;
+			n = std::stoul(n_temp.digits_string.substr(0, n_max_digits), nullptr, base_radix);
+		}
+		//calculate nominator excessive lenght than maximum arithmatic digits
+		if (n_temp.digits_string.length() > n_max_digits)
+		{
+			n_extra_digits = n_temp.digits_string.length() - n_max_digits;
+		}
+		else
+		{
+			n_extra_digits = 0;
+		}
+		//arithmetic integer division
+		q = n / d;
+		//set q_temp as BigNumber type of q
+		q_temp.set(q);
+		//mul temp by enough 10 
+		q_temp.mul_10(n_extra_digits - d_extra_digits);
+		temp = d_temp * q_temp;
+		while (temp > n_temp)
+		{
+			--q;
+			//set q_temp as BigNumber type of q
+			q_temp.set(q);
+			//mul temp by enough 10 
+			q_temp.mul_10(n_extra_digits - d_extra_digits);
+			temp = d_temp * q_temp;
+		}
+		n_temp = n_temp - temp;
+		result = result + q_temp;
+
+	}
+	//
+	result.dotplace = final_dotplace;
+	while(final_dotplace > result.digits_string.length())
+	{
+		result.digits_string.insert(0, zero_character);
+	}
+	result.integer_lenght = result.digits_string.length() - final_dotplace;
+	//define result sign
+	if ((BigNumber::positive && !b.positive)|| (!BigNumber::positive && b.positive))
+	{
+		result.positive = false;
+	}
+	return result;
+}
+
+
+void BigNumber::mul_10(std::string::size_type i) {
+
+	if (BigNumber::digits_string != zero_character)
+	{
+		while (i > 0)
+		{
+			if (BigNumber::dotplace > 0)
+			{
+				--BigNumber::dotplace;
+				if (BigNumber::integer_lenght > 0)
+				{
+					++BigNumber::integer_lenght;
+				}
+				else
+				{
+					if (BigNumber::digits_string[0] == zero_character[0]) 
+					{ 
+						BigNumber::digits_string.erase(0, 1);
+					}
+					else
+					{
+						++BigNumber::integer_lenght;
+
+					}
+
+				}
+			}
+			else
+			{
+				BigNumber::digits_string.push_back(zero_character[0]);
+				++BigNumber::integer_lenght;
+			}
+			--i;
+		}
+	}
+}
+
+void BigNumber::dec() {
+	BigNumber big_one;
+	big_one.set(1);
+	*this =  sub(big_one);
+}
+
+void BigNumber::inc() {
+	BigNumber big_one;
+	big_one.set(1);
+	*this = add(big_one);
+}
+
+void BigNumber::abs() {
+	if (!BigNumber::positive) BigNumber::positive = true;
+}
+
+bool BigNumber::operator != (BigNumber &b) {
+	if (BigNumber::compare(b) == equal)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+bool BigNumber::operator == (BigNumber &b) {
+	if (BigNumber::compare(b) == equal)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+}
+bool BigNumber::operator > (BigNumber &b) {
+	if (BigNumber::compare(b) == bigger)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool BigNumber::operator < (BigNumber &b) {
+	if (BigNumber::compare(b) == smaller)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool BigNumber::operator >= (BigNumber &b) {
+	if (BigNumber::compare(b) == bigger || BigNumber::compare(b) == equal)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool BigNumber::operator <= (BigNumber &b) {
+	if (BigNumber::compare(b) == smaller || BigNumber::compare(b) == equal)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+BigNumber BigNumber::operator + (BigNumber &b) {
+	return add(b);
+}
+BigNumber BigNumber::operator - (BigNumber &b) {
+	return sub(b);
+}
+BigNumber BigNumber::operator / (BigNumber &b) {
+	return div(b);
+}
+BigNumber BigNumber::operator * (BigNumber &b) {
+	return mul(b);
+}
+
+void BigNumber::operator -- () {
+	BigNumber::dec();
+}
+
+void BigNumber::operator ++ () {
+	BigNumber::inc();
+}
+ostream & operator << (ostream & os, BigNumber &b) {
+	os << b.get_string();
+	return os;
 }
