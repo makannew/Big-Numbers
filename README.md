@@ -6,6 +6,11 @@ It is a class that is useful for dealing with realy big numbers. We can define n
 
 This repo is compiled by [Makan Edrisi](https://github.com/makannew)
 
+## Table of content
+- [Class members]
+- [Documentation]
+- [How to use with example]
+
 ## How to use
 By adding "BigNumber.h" and "BigNumber.cpp" to a project we can define BigNumber variables like regular int or double variables.
 The example below shows how it works:
