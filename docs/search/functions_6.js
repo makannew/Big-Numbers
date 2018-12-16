@@ -8,7 +8,7 @@ var searchData=
   ['operator_2d_2d',['operator--',['../class_big_number.html#ad37ed4ce9861a597ae6728229dd9b2cb',1,'BigNumber']]],
   ['operator_2f',['operator/',['../class_big_number.html#a4f1b703ef84242cc7124e08634e945d6',1,'BigNumber']]],
   ['operator_3c',['operator&lt;',['../class_big_number.html#aa313323111dd5ac892546ddf687d173d',1,'BigNumber']]],
-  ['operator_3c_3c',['operator&lt;&lt;',['../class_big_number.html#a6eb1425f8a3f3fadec598e67b3a92a4a',1,'BigNumber::operator&lt;&lt;()'],['../_big_number_8cpp.html#a6eb1425f8a3f3fadec598e67b3a92a4a',1,'operator&lt;&lt;():&#160;BigNumber.cpp']]],
+  ['operator_3c_3c',['operator&lt;&lt;',['../_big_number_8cpp.html#a6eb1425f8a3f3fadec598e67b3a92a4a',1,'BigNumber.cpp']]],
   ['operator_3c_3d',['operator&lt;=',['../class_big_number.html#a087508f4793624e66c28ba0f81cdc4cd',1,'BigNumber']]],
   ['operator_3d_3d',['operator==',['../class_big_number.html#a534371cbbe074dddf9e927963c37e612',1,'BigNumber']]],
   ['operator_3e',['operator&gt;',['../class_big_number.html#a9afd612101e13d3077f8db9797571ae7',1,'BigNumber']]],

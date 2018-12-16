@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['is_5fvalid',['is_valid',['../class_big_number.html#ab362904a90fc537da8f38099f75de662',1,'BigNumber']]]
+  ['max_5fdiv_5fdigits',['max_div_digits',['../class_big_number.html#ab188875d7aacd5317fd5e8e841088eb8',1,'BigNumber']]]
 ];

@@ -8,6 +8,8 @@
  * It uses string as data containers, so the limitation of how big they can be will defined 
  * by limitaion of std::string class which it will be limited by hardware resources
  *
+ * To limit divition digits member variable max_div_digits can be set
+ *
  * The example below shows how to use this class
  *@code
  * #include "BigNumber.h"
@@ -17,11 +19,12 @@
  * int main() {
  * BigNumber i,j,k;
  * i = "0.0000000000000000000000000000000000000000000000000000000001"
- * j = "-100000000000000000000000000000000000000000000000000000000000"
+ * j = "-300000000000000000000000000000000000000000000000000000000000"
  * 
  * std::cout << i + j << std::endl;
  * std::cout << i - j << std::endl;
  * std::cout << i * j << std::endl;
+ * max_div_digits = 1000;
  * std::cout << i / j << std::endl;
  * if (i == j) std::cout << "i = j";
  * if (i > j) std::cout << "i > j"; 
@@ -31,7 +34,7 @@
  *    
  * @author Makan Edrisi
  * @version 1.1
- * @date Nov 2018
+ * @date Dec 2018
 */
 
 #include<iostream>
@@ -42,6 +45,8 @@ using namespace std;
 #define BigNumber_H
 class BigNumber {
 public:
+	///maximum digits of fraction part during dividing
+	string::size_type max_div_digits = 100;
 	/// default constructor.
 	BigNumber();
 
@@ -170,13 +175,14 @@ public:
 	* BigNumber j = "0.00982398"
 	* BigNumber k;
 	* k = i + j; 
-	* std::cout << i + j << std::endl;
-	 * std::cout << k << std::endl;
+	* i.add(j);
+	* std::cout << i << std::endl;
+	* std::cout << k << std::endl;
 	* {
 	* @endcode
 	*
-	* @param b is a BigNumber that would be add
-	* @return void
+	* @param b is the BigNumber that will added to this BigNumber
+	* @return BigNumber
 	*
 	* @see sub()
 	* @see mul()
@@ -185,18 +191,209 @@ public:
 	*/
 	BigNumber add(BigNumber &b);
 
+/** @brief multiply a BigNumber to this BigNumber
+*
+*	overloaded operator * also can be used
+*
+*@code
+* #include "BigNumber.h"
+* #include <iostream>
+* #include <string>
+*
+* int main() {
+* BigNumber i = "30"
+* BigNumber j = "0.2"
+* BigNumber k;
+* k = i * j;
+* i.mul(j);
+* std::cout << i << std::endl;
+* std::cout << k << std::endl;
+* {
+* @endcode
+*
+* @param b is the BigNumber that multiply to this BigNumber
+* @return BigNumber
+*
+* @see add()
+* @see sub()
+* @see div()
+* @see mul_10()
+*/
 	BigNumber mul(BigNumber &b);
 
+/** @brief Subtract a BigNumber from this BigNumber
+*
+*	overloaded operator - also can be used
+*
+*@code
+* #include "BigNumber.h"
+* #include <iostream>
+* #include <string>
+*
+* int main() {
+* BigNumber i = "350"
+* BigNumber j = "200"
+* BigNumber k;
+* k = i - j;
+* i.sub(j);
+* std::cout << i << std::endl;
+* std::cout << k << std::endl;
+* {
+* @endcode
+*
+* @param b is the BigNumber that subtract from this BigNumber
+* @return BigNumber
+*
+* @see add()
+* @see mul()
+* @see div()
+* @see mul_10()
+*/
 	BigNumber sub(BigNumber &b);
-
+/** @brief multiply a BigNumber to this BigNumber
+*
+*	overloaded operator / also can be used
+*
+*@code
+* #include "BigNumber.h"
+* #include <iostream>
+* #include <string>
+*
+* int main() {
+* BigNumber i = "10"
+* BigNumber j = "3"
+* i.max_div_digits = 100; //continue dividing up to 100 fractional digits
+* BigNumber k;
+* k = i / j;
+* i.div(j);
+* std::cout << i << std::endl;
+* std::cout << k << std::endl;
+* {
+* @endcode
+*
+* @param b is the BigNumber as divisor
+* @return BigNumber
+*
+* @see add()
+* @see sub()
+* @see dmul()
+* @see mul_10()
+*/
 	BigNumber div(BigNumber &b);
 
+	/** @brief multiply a BigNumber by 10 ^ b
+	*
+	*
+	*@code
+	* #include "BigNumber.h"
+	* #include <iostream>
+	* #include <string>
+	*
+	* int main() {
+	* BigNumber i = "3.14"
+	* i.mul_10();
+	* std::cout << i << std::endl;
+	* i.mul_10(3);
+	* std::cout << i << std::endl;
+	* {
+	* @endcode
+	*
+	* @param b is the number of 10 that multiply to this BigNumber
+	* @return BigNumber
+	*
+	* @see add()
+	* @see mul()
+	* @see div()
+	* @see sub()
+	*/
 	void mul_10(std::string::size_type = 1); // default mul by 10
 
+/** @brief decrease this BigNumber by 1
+*
+*	overloaded operator -- also can be used
+*
+*@code
+* #include "BigNumber.h"
+* #include <iostream>
+* #include <string>
+*
+* int main() {
+* BigNumber i = "1000"
+* i.dec();
+* std::cout << i << std::endl;
+* --i;
+* std::cout << i << std::endl;
+* {
+* @endcode
+*
+* @param no need
+* @return void
+*
+* @see inc()
+* @see add()
+* @see sub()
+* @see mul()
+* @see div()
+* @see mul_10()
+*/
 	void dec();
 
+/** @brief increase this BigNumber by 1
+*
+*	overloaded operator ++ also can be used
+*
+*@code
+* #include "BigNumber.h"
+* #include <iostream>
+* #include <string>
+*
+* int main() {
+* BigNumber i = "1000"
+* i.inc();
+* std::cout << i << std::endl;
+* ++i;
+* std::cout << i << std::endl;
+* {
+* @endcode
+*
+* @param no need
+* @return void
+*
+* @see dec()
+* @see add()
+* @see sub()
+* @see mul()
+* @see div()
+* @see mul_10()
+*/
 	void inc();
 
+/** @brief return absolute value of this BigNumber
+*
+*	Disregard to the sign of the BigNumber it will always set to positive sign
+*
+*@code
+* #include "BigNumber.h"
+* #include <iostream>
+* #include <string>
+*
+* int main() {
+* BigNumber i = "-1"
+* i.abs();
+* std::cout << i << std::endl;
+* {
+* @endcode
+*
+* @param no need
+* @return void
+*
+* @see dec()
+* @see add()
+* @see sub()
+* @see mul()
+* @see div()
+* @see mul_10()
+*/
 	void abs();
 
 	bool operator != (BigNumber &b);
@@ -215,9 +412,9 @@ public:
 	friend ostream & operator << (ostream & os, BigNumber &b);
 
 private:
-	//Member Variables
+	///Member Variables
 
-	//for comparing two numbers
+	///for comparing two numbers
 	enum comp { equal, bigger, smaller };
 
 	string period = ".";
@@ -230,19 +427,18 @@ private:
 
 	string valid_digits = "0123456789";
 
-	//maximum digits of fraction part during dividing
-	string::size_type max_div_digits = 100;
 
-	//store big number as string of digits
+
+	///store big number as string of digits
 	string digits_string="0";
 
-	//fraction part of the number will define by dotplace
+	///fraction part of the number will define by dotplace
 	string::size_type dotplace=0;
 
-	//integer part of the number will define by integer_lenght
+	///integer part of the number will define by integer_lenght
 	string::size_type integer_lenght=1;
 
-	//radix or base for number interpretation
+	///radix or base for number interpretation
 	int base_radix = 10;
 
 

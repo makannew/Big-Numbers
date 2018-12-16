@@ -1,10 +1,7 @@
 //Function definitions
 #include "stdafx.h"
 #include "BigNumber.h"
-//#include <type_traits>
 #include <assert.h>
-//
-//#include <iomanip>
 
 
 string BigNumber::same_pos_digits(BigNumber &b, string::size_type pos) const	{

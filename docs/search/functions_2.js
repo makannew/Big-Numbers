@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['get_5fsign',['get_sign',['../class_big_number.html#a442f2cbf28cdb3f4b282733f5d665bbe',1,'BigNumber']]],
-  ['get_5fstring',['get_string',['../class_big_number.html#ae2a53447df8a97f9a0e7c75f35e1b7fa',1,'BigNumber']]]
+  ['dec',['dec',['../class_big_number.html#a3bd7e9a9af8e9a2ae5f595fd685cbd68',1,'BigNumber']]],
+  ['div',['div',['../class_big_number.html#a9889b40f8c1ddced8b3306b0811b5b68',1,'BigNumber']]]
 ];
