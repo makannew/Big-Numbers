@@ -35,4 +35,4 @@ int main()
     return 0;
 }
 ```
-![Alt text](/relative/screenshot.jpg?raw=true "Optional Title")
+![result:](Big-Numbers/screenshot.jpg?raw=true "Optional Title")
