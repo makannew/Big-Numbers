@@ -1,10 +1,32 @@
-BigNumbers
+BigNumber
 ===========
 It is a class that is useful for dealing with realy big numbers. We can define numbers as integer or fractional with thausands of digits and do math operations same as basic variables.
 
 ## Credits
 
 This repo is compiled by [Makan Edrisi](https://github.com/makannew)
+
+## Table of content
+- [Class members](https://github.com/makannew/Big-Numbers/blob/master/README.md#Class-Members)
+- [Documentation](https://github.com/makannew/Big-Numbers/blob/master/README.md#Documentation)
+- [How to use with example](https://github.com/makannew/Big-Numbers/blob/master/README.md#how-to-use)
+
+## Class Members
+- add(BigNumber b) or operator +
+- sub(BigNumber b) or operator -
+- mul(BigNumber b) or operator *
+- mul_10(size_type n)
+- div(BigNumber b) or operator /
+- get_string()
+- get_sign()
+- inc() or operator ++
+- dec() or operator --
+- max_div_digits
+- set () or operator =
+- set_to_zero()
+
+## Documentation
+Class members implementation documented by Doxygen. It is available [here](https://makannew.github.io/Big-Numbers/)
 
 ## How to use
 By adding "BigNumber.h" and "BigNumber.cpp" to a project we can define BigNumber variables like regular int or double variables.
@@ -35,4 +57,4 @@ int main()
     return 0;
 }
 ```
-![Alt text](/relative/screenshot.jpg?raw=true "Optional Title")
+![result](screenshot.jpg)
