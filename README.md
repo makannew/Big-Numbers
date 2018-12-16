@@ -7,11 +7,18 @@ It is a class that is useful for dealing with realy big numbers. We can define n
 This repo is compiled by [Makan Edrisi](https://github.com/makannew)
 
 ## Table of content
-- [Class members]
-- [Documentation]
+- [Class members](https://github.com/makannew/Big-Numbers/blob/master/README.md#Class-Members)
+- [Documentation](https://github.com/makannew/Big-Numbers/blob/master/README.md#Documentation)
 - [How to use with example](https://github.com/makannew/Big-Numbers/blob/master/README.md#how-to-use)
 
-##Documentation
+## Class Members
+- add(BigNumber b)
+- sub(BigNumber b)
+- mul(BigNumber b)
+- mul_10(size_t n)
+- div(BigNumber b)
+
+## Documentation
 Class members implementation documented by Doxygen. It is available [here](https://makannew.github.io/Big-Numbers/)
 
 ## How to use
