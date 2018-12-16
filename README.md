@@ -7,7 +7,8 @@ It is a class that is useful for dealing with realy big numbers. We can define n
 This repo is compiled by [Makan Edrisi](https://github.com/makannew)
 
 ## How to use
-By adding "BigNumber.h" and "BigNumber.cpp" to a progect we can define BigNumber variables like regular int or double variables.
+By adding "BigNumber.h" and "BigNumber.cpp" to a project we can define BigNumber variables like regular int or double variables.
+The example below shows how it works:
 ```
 #include "stdafx.h"
 #include <iostream>
@@ -34,3 +35,4 @@ int main()
     return 0;
 }
 ```
+![Alt text](/relative/screenshot.jpg?raw=true "Optional Title")
